@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: broker
+  namespace: memphis
+  labels:
+    app: broker
+spec:
+  selector:
+    matchLabels:
+      app: broker
+  template:
+    metadata:
+      labels:
+        app: broker
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: broker
+          imagePullPolicy: Always
+          image: memphisos/memphis-broker:latest
+          args:
+            - "-js"
+            - "--auth=memphis"
+            - "--websocket_no_tls=true"
+            - "-m"
+            - "8222"
+          resources:
+            limits:
+              cpu: 500m
+              memory: 1Gi
+            requests:
+              cpu: 500m
+              memory: 1Gi
+          ports:
+            - containerPort: 6666
+            - containerPort: 7770
+            - containerPort: 8222
+            - containerPort: 9000
+          env:
+            - name: EXTERNAL_MONGO
+              value: "true"
+            - name: MONGO_URL
+              value: "mongodb://mongo"
+            - name: ROOT_PASSWORD
+              value: memphis
+            - name: CONNECTION_TOKEN
+              value: memphis
+            - name: DOCKER_ENV
+              value: "true"
+            - name: ANALYTICS
+              value: "true"
+            - name: LOGS_RETENTION_IN_DAYS
+              value: "3"
+            - name: JWT_SECRET
+              value: 35nhvjfosfklgmfg56+fdsgzvfnjksacvbhfksfkgofadsjfgjkoldsdkfvpl’jbgio;dfsjgkl;’XZFVMifobd;dlgjv[sfvjmiodfkvs2fh;fhk44gfdhksdkfdffk
+            - name: REFRESH_JWT_SECRET
+              value: 35c7b3eb969db065bfa3c66b38e4323e8f73113f3965dfb55c6bc585dcb0ba62bd399e2588fdc8f709ae0b63fb24be32590f134506ca1d7a4314339f11b8045a
+

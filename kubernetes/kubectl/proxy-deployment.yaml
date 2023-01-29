@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: proxy
+  namespace: memphis
+  labels:
+    app: proxy
+spec:
+  selector:
+    matchLabels:
+      app: proxy
+  template:
+    metadata:
+      labels:
+        app: proxy
+    spec:
+      terminationGracePeriodSeconds: 30
+      containers:
+        - name: proxy
+          image: memphisos/memphis-http-proxy:latest
+          imagePullPolicy: Always
+          resources:
+            limits:
+              cpu: 200m
+              memory: 500Mi
+            requests:
+              cpu: 200m
+              memory: 500Mi
+          ports:
+            - containerPort: 4444
+          env:
+            - name: JWT_SECRET
+              value: 35nhvjfosfklgmfg56+fdsgzvfnjksacvbhfksfkgofadsjfgjkoldsdkfvpl’jbgio;dfsjgkl;’XZFVMifobd;dlgjv[sfvjmiodfkvs2fh;fhk44gfdhksdkfdffk
+            - name: REFRESH_JWT_SECRET
+              value: 35c7b3eb969db065bfa3c66b38e4323e8f73113f3965dfb55c6bc585dcb0ba62bd399e2588fdc8f709ae0b63fb24be32590f134506ca1d7a4314339f11b8045a
+            - name: CONNECTION_TOKEN
+              value: memphis
+            - name: ROOT_USER
+              value: memphis
+            - name: MEMPHIS_HOST
+              value: broker
+            - name: HTTP_PORT
+              value: "4444"
+
+
